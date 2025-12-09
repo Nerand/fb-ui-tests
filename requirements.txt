@@ -1,6 +1,5 @@
 selenium
 webdriver-manager
 pytest
-pytest-base-url
 pytest-html
 pytest-timeout
