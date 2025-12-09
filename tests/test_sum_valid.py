@@ -28,11 +28,8 @@ def test_not_accept_sum(driver, base_url):
     field = go_to_sum_input(driver, base_url)
     field.clear()
     field.send_keys("9099")
-
-    button = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "button.g-button"))
-    )
-    assert button.is_enabled(), "Перевод отклоняется при валидной сумме"
+    buttons = driver.find_elements(By.CSS_SELECTOR, "button.g-button")
+    assert len(buttons) == 0, "Кнопка не должна отображаться при превышении суммы"
 
 
 def test_input_summ_negative(driver, base_url):
@@ -47,6 +44,11 @@ def test_input_summ_negative(driver, base_url):
 def test_empty_sum(driver, base_url):
     field = go_to_sum_input(driver, base_url)
     field.clear()
+    field.send_keys("0")
 
-    button = driver.find_elements(By.CSS_SELECTOR, "button.g-button")
-    assert len(button) == 0, "Кнопка «Перевести» появляется при пустой сумме"
+    button = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "button.g-button"))
+    )
+
+    style = button.get_attribute("style") or ""
+    assert "pointer-events: none" in style, "Кнопка должна быть некликабельной при пустой сумме"

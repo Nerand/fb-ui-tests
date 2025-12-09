@@ -3,3 +3,4 @@ webdriver-manager
 pytest
 pytest-html
 pytest-timeout
+pytest-base-url==0.0.0
